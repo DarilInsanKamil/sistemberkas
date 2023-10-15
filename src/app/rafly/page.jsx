@@ -121,7 +121,6 @@ const Page = () => {
   //       });
   //   };
 
-
   const getCurrentPageData = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -153,24 +152,26 @@ const Page = () => {
             handleModal={handleModal}
           />
         ) : null}
-        <table className={styles.table}>
-          <thead className={styles.thead}>
-            <tr className={styles.tr_thead}>
-              <th className={styles.item_head}>Nama</th>
-              <th className={styles.item_head}>NIM</th>
-              <th className={styles.item_head}>Kelas</th>
-              <th className={styles.item_head}>Alamat</th>
-            </tr>
-          </thead>
-          {getCurrentPageData().map((res, idx) => {
-            return (
-              <Suspense fallback={<Loader />} key={idx}>
-                <TableBody data={res} />
-              </Suspense>
-            );
-          })}
-        </table>
-        <div className={styles.btn_container}>
+        <div className={styles.section_table}>
+          <table className={styles.table}>
+            <thead className={styles.thead}>
+              <tr className={styles.tr_thead}>
+                <th className={styles.item_head}>Nama</th>
+                <th className={styles.item_head}>NIM</th>
+                <th className={styles.item_head}>Kelas</th>
+                <th className={styles.item_head}>Alamat</th>
+              </tr>
+            </thead>
+            {getCurrentPageData().map((res, idx) => {
+              return (
+                <Suspense fallback={<Loader />} key={idx}>
+                  <TableBody data={res} />
+                </Suspense>
+              );
+            })}
+          </table>
+        </div>
+        <div className={styles.pagination}>
           <button
             className={styles.btn_close}
             onClick={() => handlePageChange(currentPage - 1)}
