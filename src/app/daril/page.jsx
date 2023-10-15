@@ -8,6 +8,8 @@ const Page = () => {
   const [data, setData] = useState([]);
   const [isDataChange, setIsDataChange] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1); // Current page number
+  const itemsPerPage = 5; // Number of items per page
   const [inputData, setInputData] = useState({
     Nama: "",
     NIM: "",
@@ -119,6 +121,18 @@ const Page = () => {
   //       });
   //   };
 
+  const getCurrentPageData = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    if (data.datas && data.datas.length > 0) {
+      return data.datas.slice(startIndex, endIndex);
+    }
+    return [];
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
   return (
     <div className={styles.table_container}>
       <div className={styles.sub_container_table}>
@@ -137,6 +151,7 @@ const Page = () => {
             handleModal={handleModal}
           />
         ) : null}
+        <div className={styles.section_table}>
         <table className={styles.table}>
           <thead className={styles.thead}>
             <tr className={styles.tr_thead}>
@@ -146,15 +161,33 @@ const Page = () => {
               <th className={styles.item_head}>Alamat</th>
             </tr>
           </thead>
-          {data.datas &&
-            data.datas.map((res, idx) => {
-              return (
-                <Suspense fallback={<Loader />}>
-                  <TableBody data={res} key={idx} />
-                </Suspense>
-              );
-            })}
+          {getCurrentPageData().map((res, idx) => {
+            return (
+              <Suspense fallback={<Loader />} key={idx}>
+                <TableBody data={res} />
+              </Suspense>
+            );
+          })}
         </table>
+        </div>
+        <div className={styles.pagination}>
+          <button
+            className={styles.btn_close}
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            previous
+          </button>
+          <button
+            className={styles.btn_submit}
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={
+              data.datas && data.datas.length <= currentPage * itemsPerPage
+            }
+          >
+            next
+          </button>
+        </div>
       </div>
     </div>
   );
